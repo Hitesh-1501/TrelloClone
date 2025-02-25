@@ -43,7 +43,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var headerBinding : NavHeaderMainBinding
     private lateinit var mainContentBinding: MainContentBinding
     private lateinit var mSharedPreferences: SharedPreferences
-    private var directDownloadLink : String = "https://drive.google.com/file/d/1tIExj0ewmWNovziGwDZMkxTTuvrPDcTJ/view?usp=sharing"
+    private var directDownloadLink : String = "https://drive.google.com/drive/folders/1rX0BtKDkjNZ5cOc85836BsqQZ1iBkgQR?usp=sharing"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
