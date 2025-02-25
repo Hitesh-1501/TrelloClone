@@ -10,6 +10,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.annotation.RequiresApi
@@ -176,20 +177,43 @@ class MyProfileActivity : BaseActivity() {
         setResult(Activity.RESULT_OK)
         finish()
     }
-   // A function to update the user profile details into the database.
-   private fun updateUserProfileData(){
-        val userHashMap = HashMap<String, Any>()
 
-        if(mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image){
-            userHashMap[Constants.IMAGE] = mProfileImageURL
+    private fun validateProfile(name:String, mobileNo:String): Boolean{
+        return when{
+            TextUtils.isEmpty(name)->{
+                showErrorSnackBar("Please Enter a name")
+                hideProgressDialog()
+                false
+            }
+            TextUtils.isEmpty(mobileNo)->{
+                showErrorSnackBar("Please Enter a mobileNo")
+                hideProgressDialog()
+                false
+            }
+            else->{
+                true
+            }
         }
-        if(binding.etName.text.toString() != mUserDetails.name){
-            userHashMap[Constants.NAME] = binding.etName.text.toString()
-        }
-        if(binding.etMobile.text.toString() != mUserDetails.mobile.toString()){
-            userHashMap[Constants.MOBILE] = binding.etMobile.text.toString().toLong()
-        }
-       // Update the data in the database.
-       FirestoreClass().updateUserProfileData(this,userHashMap)
     }
+   // A function to update the user profile details into the database.
+   private fun updateUserProfileData() {
+       val userHashMap = HashMap<String, Any>()
+       val userName = binding.etName.text.toString().trim { it <= ' ' }
+       val mobileNo = binding.etMobile.text.toString().trim { it <= ' ' }
+
+       if (validateProfile(userName, mobileNo)) {
+
+           if (mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image) {
+               userHashMap[Constants.IMAGE] = mProfileImageURL
+           }
+           if (binding.etName.text.toString() != mUserDetails.name) {
+               userHashMap[Constants.NAME] = binding.etName.text.toString()
+           }
+           if(binding.etMobile.text.toString() != mUserDetails.mobile.toString()) {
+               userHashMap[Constants.MOBILE] = binding.etMobile.text.toString().toLong()
+           }
+           // Update the data in the database.
+           FirestoreClass().updateUserProfileData(this, userHashMap)
+       }
+   }
 }
